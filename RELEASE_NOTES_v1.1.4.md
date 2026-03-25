@@ -2,6 +2,11 @@
 
 ## 🎉 Major Features
 
+### 🆕 New Provider: Perplexity
+- Added Perplexity AI provider support
+- Seamless integration with existing provider management
+- Full support for Perplexity's web search capabilities
+
 ### Clear Chat History
 - **Qwen AI**: Add "Clear Chat History" feature to delete all conversation history from Qwen AI website
 - **MiniMax**: Add batch delete functionality to remove all conversations
@@ -22,17 +27,27 @@
 
 ## 🚀 Improvements
 
+### Management API
+- Add remote administration API for server management
+- Secure API key-based authentication
+- Enable programmatic control of proxy settings
+
 ### Request Logging Enhancement
 - Added response body logging for both streaming and non-streaming requests
 - Added `web_search` and `reasoning_effort` fields to request logs
 - Improved error response logging
 - Enhanced log detail view with new "Response" tab
 
+### Model Mapping Configuration
+- Added unsaved changes protection to prevent accidental data loss
+- Improved UX with confirmation dialog for pending changes
+
 ### Multi-Provider Adapter Improvements
 - **Kimi**: Improved thinking mode detection with explicit phase tracking (thinking/answer)
 - **Qwen/Qwen-AI**: Enhanced parent_id handling for better multi-turn conversation support
 - **Minimax**: Optimized tool call support and request handling
 - **DeepSeek**: Improved fold/search models streaming with default content path
+- **Perplexity**: Enhanced error handling and response parsing
 
 ### Multi-Turn Conversation Support
 - Fixed parent message ID updates for non-stream responses
