@@ -165,17 +165,17 @@ print(response.choices[0].message.content)
 
 ## 📸 截图
 
-| 仪表盘                                                 | 服务商                                                 |
-| --------------------------------------------------- | --------------------------------------------------- |
-| !\[Dashboard]\(docs/screenshots/dashboard.png null) | !\[Providers]\(docs/screenshots/providers.png null) |
+| 仪表盘 | 服务商 |
+|--------|--------|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Providers](docs/screenshots/providers.png) |
 
-| 代理设置                                        | API Key                                           |
-| ------------------------------------------- | ------------------------------------------------- |
-| !\[Proxy]\(docs/screenshots/proxy.png null) | !\[API Keys]\(docs/screenshots/api-keys.png null) |
+| 代理设置 | API Key |
+|----------|---------|
+| ![Proxy](docs/screenshots/proxy.png) | ![API Keys](docs/screenshots/api-keys.png) |
 
-| 模型管理                                          | 会话管理                                            |
-| --------------------------------------------- | ----------------------------------------------- |
-| !\[Models]\(docs/screenshots/models.png null) | !\[Session]\(docs/screenshots/Session.png null) |
+| 模型管理 | 会话管理 |
+|----------|----------|
+| ![Models](docs/screenshots/models.png) | ![Session](docs/screenshots/Session.png) |
 
 ## ⚙️ 设置选项
 
