@@ -95,11 +95,34 @@ npx electron-vite dev 2>&1
 
 ```bash
 npm run build              # 构建应用
+npm run build:web          # 构建网页端部署包
 npm run build:mac          # 构建 macOS 版本 (dmg, zip)
 npm run build:win          # 构建 Windows 版本 (nsis)
 npm run build:linux        # 构建 Linux 版本 (AppImage, deb)
 npm run build:all          # 构建所有平台
 ```
+
+### 启动网页端
+
+如果您不再使用 Electron 客户端，而是希望直接部署网页管理端，请使用：
+
+```bash
+cd /home/bz/Chat2API
+npm install
+npm run build:web
+WEB_PORT=3000 CHAT2API_DATA_DIR=/home/bz/chat2api-web-data npm run start:web
+```
+
+启动后访问：
+
+- 本机访问：`http://127.0.0.1:3000`
+- 局域网访问：`http://服务器IP:3000`
+
+注意：
+
+- 不要使用 `http://0.0.0.0:3000` 作为浏览器访问地址，`0.0.0.0` 仅用于监听所有网卡
+- 建议单独指定 `CHAT2API_DATA_DIR`，避免与桌面端共用同一份数据目录
+- 账号批量导入入口：`Providers -> Z.ai -> Batch Import`
 
 ## 📖 使用方法
 
@@ -267,4 +290,3 @@ GNU 通用公共许可证 v3.0。详见 [LICENSE](LICENSE)。
 - [Tailwind CSS](https://tailwindcss.com/) - CSS 框架
 - [Zustand](https://zustand-demo.pmnd.rs/) - 状态管理
 - [Koa](https://koajs.com/) - HTTP 服务器
-

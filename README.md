@@ -95,11 +95,34 @@ npx electron-vite dev 2>&1
 
 ```bash
 npm run build              # Build the application
+npm run build:web          # Build the web deployment package
 npm run build:mac          # Build for macOS (dmg, zip)
 npm run build:win          # Build for Windows (nsis)
 npm run build:linux        # Build for Linux (AppImage, deb)
 npm run build:all          # Build for all platforms
 ```
+
+### Start the Web UI
+
+If you want to deploy the admin UI as a browser-based app without the Electron desktop shell, use:
+
+```bash
+cd /home/bz/Chat2API
+npm install
+npm run build:web
+WEB_PORT=3000 CHAT2API_DATA_DIR=/home/bz/chat2api-web-data npm run start:web
+```
+
+Then open:
+
+- Local: `http://127.0.0.1:3000`
+- LAN: `http://server-ip:3000`
+
+Notes:
+
+- Do not use `http://0.0.0.0:3000` in the browser. `0.0.0.0` is only the bind address.
+- It is recommended to set a dedicated `CHAT2API_DATA_DIR` instead of sharing the desktop data directory.
+- Batch import entry: `Providers -> Z.ai -> Batch Import`
 
 ## 📖 Usage
 
@@ -267,4 +290,3 @@ This means:
 - [Tailwind CSS](https://tailwindcss.com/) - CSS framework
 - [Zustand](https://zustand-demo.pmnd.rs/) - State management
 - [Koa](https://koajs.com/) - HTTP server
-
