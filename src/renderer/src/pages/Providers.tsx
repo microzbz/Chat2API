@@ -13,6 +13,7 @@ import {
   CustomProviderForm,
   AccountList,
   AddAccountDialog,
+  BatchImportAccountsDialog,
   AccountDetail,
   ProviderFilter,
 } from '@/components/providers'
@@ -47,6 +48,7 @@ export function Providers() {
   const [editingProvider, setEditingProvider] = useState<Provider | null>(null)
   
   const [showAddAccountDialog, setShowAddAccountDialog] = useState(false)
+  const [showBatchImportDialog, setShowBatchImportDialog] = useState(false)
   const [editingAccount, setEditingAccount] = useState<Account | null>(null)
   
   const [showModelEditor, setShowModelEditor] = useState(false)
@@ -446,6 +448,50 @@ export function Providers() {
     }
   }
 
+  const handleBatchImportAccounts = async (data: {
+    providerId: string
+    rawText: string
+    dailyLimit?: number
+  }) => {
+    try {
+      const result = await window.electronAPI.accounts.batchImport(data)
+
+      if (result.created.length > 0) {
+        const mergedAccounts = [
+          ...store.accounts.filter(account => account.providerId !== data.providerId),
+          ...store.getAccountsByProvider(data.providerId),
+          ...result.created,
+        ]
+        store.setAccounts(mergedAccounts)
+        const providerAccounts = mergedAccounts.filter(account => account.providerId === data.providerId)
+        store.updateAccountCount(
+          data.providerId,
+          providerAccounts.length,
+          providerAccounts.filter(account => account.status === 'active').length
+        )
+      }
+
+      if (result.errors.length > 0) {
+        toast({
+          title: t('providers.batchImportPartial'),
+          description: `${t('providers.batchImportCreated', { count: result.created.length })}，${t('providers.batchImportFailed', { count: result.errors.length })}`,
+          variant: 'destructive',
+        })
+      } else {
+        toast({
+          title: t('providers.batchImportSuccess'),
+          description: t('providers.batchImportCreated', { count: result.created.length }),
+        })
+      }
+    } catch (error) {
+      toast({
+        title: t('providers.batchImportFailedTitle'),
+        description: error instanceof Error ? error.message : t('providers.operationFailed'),
+        variant: 'destructive',
+      })
+    }
+  }
+
   const handleDeleteAccount = async (id: string) => {
     try {
       const success = await window.electronAPI.accounts.delete(id)
@@ -628,6 +674,7 @@ export function Providers() {
           accounts={providerAccounts}
           providerId={selectedProvider.id}
           onAddAccount={() => setShowAddAccountDialog(true)}
+          onBatchImport={() => setShowBatchImportDialog(true)}
           onEditAccount={async (account) => {
             const fullAccount = await window.electronAPI.accounts.getById(account.id, true)
             setEditingAccount(fullAccount || account)
@@ -649,6 +696,14 @@ export function Providers() {
           onValidateToken={handleValidateToken}
           editingAccount={editingAccount}
           onUpdateAccount={handleUpdateAccount}
+        />
+
+        <BatchImportAccountsDialog
+          open={showBatchImportDialog}
+          onOpenChange={setShowBatchImportDialog}
+          providerId={selectedProvider.id}
+          providerName={selectedProvider.name}
+          onImport={handleBatchImportAccounts}
         />
       </div>
     )

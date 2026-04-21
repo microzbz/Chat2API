@@ -169,7 +169,8 @@ export function AddAccountDialog({
   const isEditing = !!editingAccount
   const builtinProvider = provider as BuiltinProviderConfig | null
   const credentialFields: CredentialField[] = builtinProvider?.credentialFields || getDefaultCredentialFields(provider?.authType, t)
-  const supportsOAuth = provider && ['deepseek', 'glm', 'kimi', 'mimo', 'minimax', 'qwen', 'qwen-ai', 'zai', 'perplexity'].includes(provider.id)
+  const isDesktopRuntime = !!window.electronAPI?.tray?.quitApp
+  const supportsOAuth = isDesktopRuntime && provider && ['deepseek', 'glm', 'kimi', 'mimo', 'minimax', 'qwen', 'qwen-ai', 'zai', 'perplexity'].includes(provider.id)
 
   useEffect(() => {
     if (open) {

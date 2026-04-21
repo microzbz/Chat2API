@@ -1,8 +1,8 @@
-import { app, BrowserWindow } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import type { LogEntry, LogLevel } from '../../shared/types'
 import { IpcChannels } from '../ipc/channels'
+import { runtimeApp } from '../platform/runtime'
 
 interface LogStats {
   total: number
@@ -35,10 +35,10 @@ class LogManager {
   private maxLogs: number = 10000
   private retentionDays: number = 7
   private initialized: boolean = false
-  private mainWindow: BrowserWindow | null = null
+  private mainWindow: { webContents?: { send: (channel: string, ...args: unknown[]) => void } } | null = null
 
   constructor() {
-    const userDataPath = app.getPath('userData')
+    const userDataPath = runtimeApp.getPath('userData')
     const logDir = path.join(userDataPath, 'logs')
     
     if (!fs.existsSync(logDir)) {
@@ -48,7 +48,7 @@ class LogManager {
     this.logFile = path.join(logDir, 'app.log')
   }
 
-  setMainWindow(window: BrowserWindow | null): void {
+  setMainWindow(window: { webContents?: { send: (channel: string, ...args: unknown[]) => void } } | null): void {
     this.mainWindow = window
   }
 
@@ -123,7 +123,7 @@ class LogManager {
 
     this.saveLogs().catch(console.error)
 
-    this.mainWindow?.webContents.send(IpcChannels.LOGS_NEW_LOG, entry)
+    this.mainWindow?.webContents?.send(IpcChannels.LOGS_NEW_LOG, entry)
 
     return entry
   }

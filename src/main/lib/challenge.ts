@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { app } from 'electron'
+import { runtimeApp } from '../platform/runtime'
 
 export class DeepSeekHash {
   private wasmInstance: any
@@ -121,9 +121,9 @@ export async function getDeepSeekHash(): Promise<DeepSeekHash> {
   if (!deepSeekHashInstance) {
     deepSeekHashInstance = new DeepSeekHash()
     // Use different paths for development and production environments
-    const wasmPath = app.isPackaged
+    const wasmPath = runtimeApp.isPackaged
       ? path.join(process.resourcesPath, 'sha3_wasm_bg.7b9ca65ddd.wasm')
-      : path.join(app.getAppPath(), 'sha3_wasm_bg.7b9ca65ddd.wasm')
+      : path.join(runtimeApp.getAppPath(), 'sha3_wasm_bg.7b9ca65ddd.wasm')
     console.log('[DeepSeekHash] WASM path:', wasmPath)
     console.log('[DeepSeekHash] File exists:', fs.existsSync(wasmPath))
     try {

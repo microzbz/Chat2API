@@ -1,10 +1,9 @@
 /**
  * Credential Storage Module - Core Storage Implementation
  * Uses electron-store for persistent storage
- * Uses Electron's safeStorage API for sensitive data encryption
+ * Uses runtime safeStorage when available for sensitive data encryption
  */
 
-import { app, safeStorage, BrowserWindow } from 'electron'
 import { homedir } from 'os'
 import { join } from 'path'
 import {
@@ -33,6 +32,7 @@ import {
 } from './types'
 import { BUILTIN_PROMPTS } from '../data/builtin-prompts'
 import { IpcChannels } from '../ipc/channels'
+import { runtimeSafeStorage } from '../platform/runtime'
 
 // Dynamically import electron-store (ESM module)
 let Store: any = null
@@ -41,6 +41,11 @@ let Store: any = null
  * Storage Instance Type Definition
  */
 type StoreType = any
+type WindowLike = {
+  webContents?: {
+    send: (channel: string, ...args: unknown[]) => void
+  }
+}
 
 /**
  * Storage Manager Class
@@ -49,10 +54,10 @@ type StoreType = any
 class StoreManager {
   private store: StoreType | null = null
   private isInitialized: boolean = false
-  private mainWindow: BrowserWindow | null = null
+  private mainWindow: WindowLike | null = null
   private initializationError: Error | null = null
 
-  setMainWindow(window: BrowserWindow | null): void {
+  setMainWindow(window: WindowLike | null): void {
     this.mainWindow = window
   }
 
@@ -85,7 +90,7 @@ class StoreManager {
       Store = module.default
     }
 
-    const storagePath = this.getStoragePath()
+      const storagePath = this.getStoragePath()
 
     try {
       this.store = new Store({
@@ -149,7 +154,7 @@ class StoreManager {
    * Storage path: ~/.chat2api/
    */
   private getStoragePath(): string {
-    return join(homedir(), '.chat2api')
+    return process.env.CHAT2API_DATA_DIR || join(homedir(), '.chat2api')
   }
 
   /**
@@ -159,16 +164,9 @@ class StoreManager {
    * so it must be stable across app restarts
    */
   private getEncryptionKey(): string | undefined {
-    try {
-      if (safeStorage.isEncryptionAvailable()) {
-        // Use a fixed key - electron-store will use this to encrypt/decrypt data
-        // The key itself is not stored in the data file, only used for encryption
-        return 'chat2api-fixed-encryption-key-v1'
-      }
-    } catch (error) {
-      console.warn('Encryption unavailable, using unencrypted storage:', error)
-    }
-    return undefined
+    // Keep the same stable key in both Electron and plain Node web mode.
+    // Otherwise the web server cannot read the existing encrypted data file.
+    return 'chat2api-fixed-encryption-key-v1'
   }
 
   /**
@@ -284,13 +282,13 @@ class StoreManager {
   encryptData(data: string): string {
     try {
       console.log('[Store] encryptData input length:', data.length, 'content:', data.substring(0, 20) + '...')
-      if (safeStorage.isEncryptionAvailable()) {
+      if (runtimeSafeStorage.isEncryptionAvailable()) {
         // Create new Buffer to store encryption result
-        const encrypted = Buffer.from(safeStorage.encryptString(data))
+        const encrypted = Buffer.from(runtimeSafeStorage.encryptString(data))
         const result = encrypted.toString('base64')
         console.log('[Store] encryptData output length:', result.length, 'content:', result.substring(0, 20) + '...')
         // Verify encryption is correct
-        const decrypted = safeStorage.decryptString(encrypted)
+        const decrypted = runtimeSafeStorage.decryptString(encrypted)
         console.log('[Store] encryptData verify decryption:', decrypted.substring(0, 20) + '...', 'match:', decrypted === data)
         return result
       } else {
@@ -309,9 +307,9 @@ class StoreManager {
    */
   decryptData(encryptedData: string): string {
     try {
-      if (safeStorage.isEncryptionAvailable()) {
+      if (runtimeSafeStorage.isEncryptionAvailable()) {
         const buffer = Buffer.from(encryptedData, 'base64')
-        return safeStorage.decryptString(buffer)
+        return runtimeSafeStorage.decryptString(buffer)
       }
     } catch (error) {
       console.error('Failed to decrypt data:', error)
@@ -704,7 +702,7 @@ class StoreManager {
     
     this.store!.set('logs', logs)
 
-    this.mainWindow?.webContents.send(IpcChannels.LOGS_NEW_LOG, entry)
+    this.mainWindow?.webContents?.send(IpcChannels.LOGS_NEW_LOG, entry)
 
     return entry
   }
@@ -902,7 +900,7 @@ class StoreManager {
     
     this.store!.set('requestLogs', requestLogs)
 
-    this.mainWindow?.webContents.send(IpcChannels.REQUEST_LOGS_NEW, newEntry)
+    this.mainWindow?.webContents?.send(IpcChannels.REQUEST_LOGS_NEW, newEntry)
 
     return newEntry
   }

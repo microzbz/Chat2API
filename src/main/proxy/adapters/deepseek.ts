@@ -8,8 +8,8 @@
 
 import axios, { AxiosResponse } from 'axios'
 import { getDeepSeekHash } from '../../lib/challenge'
-import { Account, Provider } from '../store/types'
-import { storeManager } from '../store/store'
+import { Account, Provider } from '../../store/types'
+import { storeManager } from '../../store/store'
 
 const DEEPSEEK_API_BASE = 'https://chat.deepseek.com/api'
 

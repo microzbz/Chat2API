@@ -28,7 +28,8 @@ import {
   AlertCircle,
   Activity,
   Plus,
-  Trash
+  Trash,
+  Upload
 } from 'lucide-react'
 import {
   Dialog,
@@ -45,6 +46,7 @@ interface AccountListProps {
   accounts: Account[]
   providerId: string
   onAddAccount: () => void
+  onBatchImport: () => void
   onEditAccount: (account: Account) => void
   onDeleteAccount: (id: string) => void
   onValidateAccount: (id: string) => void
@@ -55,6 +57,7 @@ export function AccountList({
   accounts,
   providerId,
   onAddAccount,
+  onBatchImport,
   onEditAccount,
   onDeleteAccount,
   onValidateAccount,
@@ -183,10 +186,16 @@ export function AccountList({
           <span>•</span>
           <span className="text-green-600">{activeCount} {t('providers.onlineCount')}</span>
         </div>
-        <Button size="sm" onClick={onAddAccount}>
-          <Plus className="mr-2 h-4 w-4" />
-          {t('providers.addAccount')}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button size="sm" variant="outline" onClick={onBatchImport}>
+            <Upload className="mr-2 h-4 w-4" />
+            {t('providers.batchImport')}
+          </Button>
+          <Button size="sm" onClick={onAddAccount}>
+            <Plus className="mr-2 h-4 w-4" />
+            {t('providers.addAccount')}
+          </Button>
+        </div>
       </div>
 
       <ScrollArea className="h-[calc(100vh-400px)]">

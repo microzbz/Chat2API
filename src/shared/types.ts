@@ -44,6 +44,7 @@ export interface Account {
   requestCount?: number
   dailyLimit?: number
   todayUsed?: number
+  lastStatusCheck?: number
 }
 
 export interface Provider {
@@ -61,6 +62,7 @@ export interface Provider {
   icon?: string
   supportedModels?: string[]
   modelMappings?: Record<string, string>
+  credentialFields?: CredentialField[]
   status?: ProviderStatus
   lastStatusCheck?: number
 }

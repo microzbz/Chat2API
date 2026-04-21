@@ -200,7 +200,7 @@ export function ModelEditor({
     }
   }
 
-  const renderModelTable = (modelList: EffectiveModel[], isCustom: boolean) => {
+  const renderModelTable = (modelList: EffectiveModel[]) => {
     if (modelList.length === 0) {
       return (
         <div className="text-center py-8 text-muted-foreground border rounded-lg">
@@ -283,12 +283,12 @@ export function ModelEditor({
             <div className="space-y-6 mt-4">
               <div>
                 <h3 className="text-lg font-semibold mb-3">{t('modelEditor.defaultModels')}</h3>
-                {renderModelTable(defaultModels, false)}
+                {renderModelTable(defaultModels)}
               </div>
 
               <div>
                 <h3 className="text-lg font-semibold mb-3">{t('modelEditor.customModels')}</h3>
-                {renderModelTable(customModels, true)}
+                {renderModelTable(customModels)}
               </div>
 
               <Alert>

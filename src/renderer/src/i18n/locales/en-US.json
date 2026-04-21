@@ -217,7 +217,16 @@
     "updateModelsSuccess": "Model list updated successfully",
     "updateModelsFailed": "Failed to update model list",
     "updateModelsNotSupported": "This provider does not support dynamic model updates",
-    "updatingModels": "Updating model list..."
+    "updatingModels": "Updating model list...",
+    "batchImport": "Batch Import",
+    "batchImportDesc": "Import accounts line by line using `name----token`, `email----password----token`, or plain `token`",
+    "batchImportInput": "Import Content",
+    "batchImportHelp": "One account per line. The last segment is used as the primary credential for the provider.",
+    "batchImportSuccess": "Batch import completed",
+    "batchImportPartial": "Batch import partially completed",
+    "batchImportCreated": "Created {{count}} accounts",
+    "batchImportFailed": "{{count}} lines failed",
+    "batchImportFailedTitle": "Batch import failed"
   },
   "loginGuide": {
     "getToken": "Get {{provider}} Credentials",

@@ -113,6 +113,8 @@ export interface Account {
   dailyLimit?: number
   /** Today used count */
   todayUsed?: number
+  /** Last status validation timestamp */
+  lastStatusCheck?: number
 }
 
 /**
@@ -148,6 +150,8 @@ export interface Provider {
   supportedModels?: string[]
   /** Model name mapping */
   modelMappings?: Record<string, string>
+  /** Provider credential fields */
+  credentialFields?: CredentialField[]
   /** Provider status */
   status?: ProviderStatus
   /** Last status check time */

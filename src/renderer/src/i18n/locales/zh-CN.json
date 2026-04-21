@@ -217,7 +217,16 @@
     "updateModelsSuccess": "模型列表更新成功",
     "updateModelsFailed": "模型列表更新失败",
     "updateModelsNotSupported": "该供应商不支持动态更新模型",
-    "updatingModels": "正在更新模型列表..."
+    "updatingModels": "正在更新模型列表...",
+    "batchImport": "批量导入",
+    "batchImportDesc": "按行导入账号，支持 `name----token`、`email----password----token` 或仅 `token` 格式",
+    "batchImportInput": "批量导入内容",
+    "batchImportHelp": "每行导入一个账号，系统会自动取最后一段作为当前供应商的主认证字段。",
+    "batchImportSuccess": "批量导入成功",
+    "batchImportPartial": "批量导入部分成功",
+    "batchImportCreated": "成功创建 {{count}} 个账户",
+    "batchImportFailed": "失败 {{count}} 条",
+    "batchImportFailedTitle": "批量导入失败"
   },
   "loginGuide": {
     "getToken": "获取 {{provider}} 凭证",

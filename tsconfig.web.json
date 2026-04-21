@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist/web/server",
+    "rootDir": "src",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "types": ["node"],
+    "baseUrl": "."
+  },
+  "include": [
+    "src/web/**/*.ts",
+    "src/main/**/*.ts",
+    "src/shared/**/*.ts",
+    "src/types/**/*.d.ts",
+    "src/main/types/**/*.d.ts"
+  ],
+  "exclude": [
+    "src/main/index.ts",
+    "src/main/ipc/**/*.ts",
+    "src/main/tray.ts",
+    "src/main/tray/**/*.ts",
+    "src/main/window/**/*.ts",
+    "src/main/updater/**/*.ts",
+    "src/preload/**/*.ts",
+    "src/main/oauth/**/*.ts"
+  ]
+}

@@ -153,6 +153,15 @@ interface AccountsAPI {
     expiresAt?: number // Credit reset timestamp (milliseconds)
   } | null>
   clearChats: (accountId: string) => Promise<{ success: boolean; error?: string }>
+  batchImport: (data: {
+    providerId: string
+    rawText: string
+    dailyLimit?: number
+  }) => Promise<{
+    success: boolean
+    created: Account[]
+    errors: string[]
+  }>
 }
 
 interface OAuthAPI {
@@ -455,7 +464,7 @@ interface ContextManagementAPI {
   updateConfig: (updates: Partial<ContextManagementConfig>) => Promise<ContextManagementConfig>
 }
 
-interface ElectronAPI {
+export interface ElectronAPI {
   proxy: ProxyAPI
   store: StoreAPI
   providers: ProvidersAPI
